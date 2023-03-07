@@ -2,10 +2,12 @@
 
 from tkinter import *
 from tkinter import messagebox
+import sqlite3
 from modules.auth import *
+from modules.reg import *
 
 
-def btn_click():
+def login_click():
 	log_in = authn(login.get(), psd.get(), con, cur)
 	
 	if log_in == 0:
@@ -14,7 +16,14 @@ def btn_click():
 		print("Work was found!")
 		log.config(text = f"Login: {login.get()}")
 		ps.config(text = f"Pass: {psd.get()}")
+
+def reg_click():
+	reg = regstr(login.get(), psd.get(), con, cur)
 	
+	if reg == 0:
+		print("OH-NO!")
+	elif reg == 1:
+		print("System: Long time no see, my loathsome copy!")
 
 
 # sqlite
@@ -40,23 +49,35 @@ frame = Frame(root, bg='grey')
 frame.place(relwidth=1, relheight=1)
 
 
-# Elements
+#### Elements #####
+
+### Labels
+
+# Title
 title = Label(frame, text='Authorization', bg='grey')
-btn = Button(frame, text='Click', command=btn_click)
+
+# User info
+log = Label(frame, text='', bg='grey')
+ps = Label(frame, text='', bg='grey')
+
+### Buttons
+
+log_in = Button(frame, width='17', text='Log in', command=login_click)
+reg_me = Button(frame, width='17', text='Registration', command=reg_click)
+
+### Entries
 login = Entry(frame)
 psd = Entry(frame, show="*")
 
-global log
-global ps
-log = Label(frame, text='', bg='grey')
-ps = Label(frame, text='', bg='grey')
+
 
 
 # Packs
 title.pack()
 login.pack()
 psd.pack()
-btn.pack()
+log_in.pack()
+reg_me.pack()
 log.pack()
 ps.pack()
 
