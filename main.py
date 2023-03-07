@@ -2,22 +2,19 @@
 
 from tkinter import *
 from tkinter import messagebox
-import sqlite3
+from modules.auth import *
+
 
 def btn_click():
-	l = login.get()
-	p = psd.get()
+	log_in = authn(login.get(), psd.get(), con, cur)
 	
-	cmd = f" select * from persons where login = '{l}' and pass = '{p}' "
-	
-	cur.execute(cmd)
-	
-	if len(cur.fetchall()) > 0:
-		messagebox.showinfo(title='Oh, Yeah!', message='This is happening!')
-		log.config(text = f"Login: {l}")
-		ps.config(text = f"Pass: {p}")
+	if log_in == 0:
+		print("Nothing to do...")
 	else:
-		messagebox.showinfo(title='Oh no...', message='This isn\'t happening...')
+		print("Work was found!")
+		log.config(text = f"Login: {login.get()}")
+		ps.config(text = f"Pass: {psd.get()}")
+	
 
 
 # sqlite
@@ -49,6 +46,8 @@ btn = Button(frame, text='Click', command=btn_click)
 login = Entry(frame)
 psd = Entry(frame, show="*")
 
+global log
+global ps
 log = Label(frame, text='', bg='grey')
 ps = Label(frame, text='', bg='grey')
 
