@@ -4,7 +4,7 @@ from modules.auth import *
 import sqlite3
 
 
-def regstr(login, password, con, cur):
+def regstr(login, password):
 	
 	if login.strip() == "" and password.strip() == "":
 		messagebox.showinfo(title='Nothing', message='you wrote nothing')
@@ -13,17 +13,18 @@ def regstr(login, password, con, cur):
 	elif password.strip() == "":
 		messagebox.showinfo(title='No pass', message='No password was written')
 	else:
-		pwd = hashlib.sha256()
+		sha256 = hashlib.sha256()
 		
-		pwd.update(password.encode('utf8'))
+		sha256.update(password.encode('utf8'))
 		
-		try:
-			cmd = f" insert into persons (login, pass) values ('{login}', '{pwd.hexdigest()}')"
-	
-			cur.execute(cmd)
+		try:	
+			res = SQL.sql_query_insert(login, sha256.hexdigest())
+			if res == 1:
+				return 1
+			else:
+				return 0
 			messagebox.showinfo(title='Horray', message='You have been regisrated!')
-			con.commit()
-			return 1;
+
 		except ValueError:
 			messagebox.showinfo(title='Oh no', message='something went wrong...')
 			return 0;

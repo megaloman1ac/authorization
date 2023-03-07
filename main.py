@@ -1,14 +1,11 @@
-#!/usr/bin/python3
-
 from tkinter import *
 from tkinter import messagebox
-import sqlite3
 from modules.auth import *
 from modules.reg import *
 
 
 def login_click():
-	log_in = authn(login.get(), psd.get(), con, cur)
+	log_in = authn(login.get(), psd.get())
 	
 	if log_in == 0:
 		print("Nothing to do...")
@@ -18,18 +15,12 @@ def login_click():
 		ps.config(text = f"Pass: {psd.get()}")
 
 def reg_click():
-	reg = regstr(login.get(), psd.get(), con, cur)
+	reg = regstr(login.get(), psd.get())
 	
 	if reg == 0:
 		print("OH-NO!")
 	elif reg == 1:
 		print("System: Long time no see, my loathsome copy!")
-
-
-# sqlite
-con = sqlite3.connect('users.db')
-
-cur = con.cursor()
 
 # Main root
 root = Tk()
@@ -80,8 +71,5 @@ log_in.pack()
 reg_me.pack()
 log.pack()
 ps.pack()
-
-# sqlite commit
-con.commit()
 
 root.mainloop()
